@@ -2,6 +2,10 @@ package core.components.web;
 
 import org.openqa.selenium.*;
 
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 public class WebCommandsUtil
 {
     private WebDriver driver;
@@ -39,4 +43,24 @@ public class WebCommandsUtil
 
         return  jse.executeScript(script, $(locator));
     }
+
+    protected void highlight(By locator)
+    {
+        String script = "arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');";
+        executeScript(locator,script);
+
+    }
+
+    public Map<String,String> getAttributes(By locator)
+    {
+        String script = "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;";
+        return (Map<String,String>)executeScript(locator,script);
+    }
+
+    public WebElement $(By locator,Predicate<WebElement> filterStream)
+    {
+        Stream stream = driver.findElements(locator).stream();
+       return (WebElement) stream.filter(filterStream).findFirst().get();
+    }
+
 }

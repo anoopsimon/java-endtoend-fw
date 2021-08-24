@@ -46,10 +46,16 @@ public class Textbox extends WebCommandsUtil
         return $(selector).getAttribute(attribute);
     }
 
+    public void highlight()
+    {
+         highlight(selector);
+    }
+
     public Map<String,String> getAttributes()
     {
-        String script = "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;";
-        return (Map<String,String>)executeScript(selector,script);
-
+        return getAttributes(selector);
     }
+
+
+
 }
