@@ -9,18 +9,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 public class WebDriverUtil {
 
     private static WebDriver driver;
-    public static void initializeSession()
+    public static WebDriver initializeSession(String url)
     {
         System.out.println("Launching web browser session...");
 
         driver = new ChromeDriver();
-        driver.get("https://www.bing.com");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        driver.quit();
+        driver.get(url);
+        return driver;
     }
 
     public static void killSession()

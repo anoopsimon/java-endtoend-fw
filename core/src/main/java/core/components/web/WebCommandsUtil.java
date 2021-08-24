@@ -33,11 +33,10 @@ public class WebCommandsUtil
     }
 
 
-    public String executeScript(By locator,String script)
+    public Object executeScript(By locator,String script)
     {
         JavascriptExecutor jse = (JavascriptExecutor) driver;
-        jse.executeScript(script, $(locator));
 
-        return (String)jse.executeScript(script, $(locator));
+        return  jse.executeScript(script, $(locator));
     }
 }

@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Textbox extends WebCommandsUtil
 {
@@ -45,10 +46,10 @@ public class Textbox extends WebCommandsUtil
         return $(selector).getAttribute(attribute);
     }
 
-    public String getAttributes()
+    public Map<String,String> getAttributes()
     {
         String script = "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;";
-        String attributes= executeScript(selector,script);
-       return  attributes;
+        return (Map<String,String>)executeScript(selector,script);
+
     }
 }
