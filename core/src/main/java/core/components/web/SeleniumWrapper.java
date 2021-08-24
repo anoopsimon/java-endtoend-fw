@@ -6,11 +6,11 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class WebCommandsUtil
+public class SeleniumWrapper
 {
     private WebDriver driver;
 
-    public WebCommandsUtil(WebDriver driver)
+    public SeleniumWrapper(WebDriver driver)
     {
         this.driver=driver;
     }
@@ -20,51 +20,51 @@ public class WebCommandsUtil
         if(selector==null) throw new RuntimeException("By selector can't be null");
     }
 
-    public WebElement $(By locator) {
-        validate(driver,locator);
-        if (IsElementPresent(locator))
-            return driver.findElement(locator);
+    public WebElement $(By selector) {
+        validate(driver,selector);
+        if (IsElementPresent(selector))
+            return driver.findElement(selector);
 
         try {
-            throw new NoSuchElementException("No web element found for selector => " + locator);
+            throw new NoSuchElementException("No web element found for selector => " + selector);
         } catch (RuntimeException re) {
             throw re;
         }
     }
 
-    public boolean IsElementPresent(By locator) {
-        boolean flag = driver.findElements(locator).size() >= 1;
+    public boolean IsElementPresent(By selector) {
+        boolean flag = driver.findElements(selector).size() >= 1;
         return flag;
     }
 
-    public void click(By locator){
-        $(locator).click();
+    public void click(By selector){
+        $(selector).click();
     }
 
 
-    public Object executeScript(By locator,String script)
+    public Object executeScript(By selector,String script)
     {
         JavascriptExecutor jse = (JavascriptExecutor) driver;
 
-        return  jse.executeScript(script, $(locator));
+        return  jse.executeScript(script, $(selector));
     }
 
-    protected void highlight(By locator)
+    protected void highlight(By selector)
     {
         String script = "arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');";
-        executeScript(locator,script);
+        executeScript(selector,script);
 
     }
 
-    public Map<String,String> getAttributes(By locator)
+    public Map<String,String> getAttributes(By selector)
     {
         String script = "var items = {}; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;";
-        return (Map<String,String>)executeScript(locator,script);
+        return (Map<String,String>)executeScript(selector,script);
     }
 
-    public WebElement $(By locator,Predicate<WebElement> filterStream)
+    public WebElement $(By selector,Predicate<WebElement> filterStream)
     {
-        Stream stream = driver.findElements(locator).stream();
+        Stream stream = driver.findElements(selector).stream();
        return (WebElement) stream.filter(filterStream).findFirst().get();
     }
 

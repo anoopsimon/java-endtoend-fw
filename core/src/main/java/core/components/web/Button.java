@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.Map;
 
-public class Button extends WebCommandsUtil
+public class Button extends SeleniumWrapper
 {
     private WebDriver driver=null;
     By selector = null;

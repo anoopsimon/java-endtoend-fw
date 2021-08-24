@@ -4,10 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public class Textbox extends WebCommandsUtil
+public class Textbox extends SeleniumWrapper
 {
     private WebDriver driver=null;
     By selector=null;
