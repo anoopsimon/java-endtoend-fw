@@ -17,10 +17,11 @@ public class WebCommandsUtil
 
     protected void validate(WebDriver driver,By selector){
         if(driver==null) throw new RuntimeException("webdriver instance can't be null");
-        if(selector==null) throw new RuntimeException("By selector  can't be null");
+        if(selector==null) throw new RuntimeException("By selector can't be null");
     }
 
     public WebElement $(By locator) {
+        validate(driver,locator);
         if (IsElementPresent(locator))
             return driver.findElement(locator);
 
