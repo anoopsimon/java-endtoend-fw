@@ -17,6 +17,21 @@ public class Button extends WebCommandsUtil
         this.selector=selector;
     }
 
+    public void getText()
+    {
+        $(selector).getText();
+    }
+
+    public void highlight()
+    {
+        highlight(selector);
+    }
+
+    public void click()
+    {
+        click(selector);
+    }
+
     public Map<String,String> getAttributes()
     {
         return getAttributes(selector);

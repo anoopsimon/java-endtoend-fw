@@ -36,6 +36,10 @@ public class WebCommandsUtil
         return flag;
     }
 
+    public void click(By locator){
+        $(locator).click();
+    }
+
 
     public Object executeScript(By locator,String script)
     {
