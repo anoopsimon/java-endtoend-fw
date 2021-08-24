@@ -6,6 +6,6 @@ public class UtilTests
     @Test
     public void verifyWebDriverUtil()
     {
-        System.out.println("All good for now");
+        
     }
 }
