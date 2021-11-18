@@ -11,7 +11,7 @@ public class FakeFiller
 {
     public static void main(String[] args) {
         //impl here
-        getFlow("","");
+        getFlow("","TC01");
     }
 
     public static void getFlow(String dataSheet,String testCaseName)
@@ -21,17 +21,29 @@ public class FakeFiller
         System.out.println(path);
         List<Row> datasheet = ExcelUtil.getSheet(path,"Sheet1");
         Row header=datasheet.stream().findFirst().get();
-        List<TreeMap> curatedData=new ArrayList<>();
+        List<TreeMap<String,String>> curatedData=new ArrayList<TreeMap<String,String>>();
         for (Row row:datasheet.stream().skip(1).collect(Collectors.toList()))
         {
             TreeMap<String, String> data = new TreeMap<String,String>();
             for (int index=0;index<row.getCellCount();index++)
             {
-                System.out.println("Row >" + index);
-                System.out.println("Column Name :" +header.getCell(index).asString() + "||"  +row.getCell(index).asString());
-                data.put(header.getCell(index).asString(),row.getCell(index).asString());
+
+                //System.out.println("Row >" + index);
+                //System.out.println("Column Name :" +header.getCell(index).asString() + "||"  +row.getCell(index).asString());
+                String headerName = header.getCell(index).asString();
+                if(headerName.equalsIgnoreCase(testCaseName)){
+                    headerName="Answer";
+                }
+                data.put(headerName,row.getCell(index).asString());
             }
             curatedData.add(data);
+        }
+
+        for (TreeMap cd:curatedData   ) {
+            for (Object c:cd.keySet()){
+
+                System.out.println(c +":"+cd.get(c));
+            }
         }
     }
 }

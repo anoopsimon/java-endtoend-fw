@@ -11,8 +11,6 @@ import java.util.Optional;
 
 public class WebDriverDemo
 {
-    static ChromeDriver chromeDriver;
-    static DevTools devTools;
     public static void main(String[] args) throws InterruptedException {
         performanceMetricsExample();
     }
