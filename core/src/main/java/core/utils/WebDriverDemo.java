@@ -29,26 +29,29 @@ public class WebDriverDemo
         DevTools devTools = driver.getDevTools();
         devTools.createSession();
         devTools.send(Network.enable(Optional.empty(),Optional.empty(),Optional.empty()));
-        List<HashMap<String,String>> data = new ArrayList<>();
+        List<WebResponse> data = new ArrayList<WebResponse>();
         devTools.addListener(Network.responseReceived(),response->
         {
             if(response.getType()== ResourceType.XHR) {
 
                 RequestId requestId = response.getRequestId();
 
-                System.out.println("************************");
-                System.out.println("URL : " + response.getResponse().getUrl());
-                Headers headers = response.getResponse().getHeaders();
-                System.out.println(headers);
-                System.out.println(response.getType().toJson());
-                String body = devTools.send(Network.getResponseBody(requestId)).getBody();
-                System.out.println("Body :" + body);
-                System.out.println("************************");
+//                System.out.println("************************");
+//                System.out.println("URL : " + response.getResponse().getUrl());
+//                Headers headers = response.getResponse().getHeaders();
+//                System.out.println(headers);
+//                System.out.println(response.getType().toJson());
+               String body = devTools.send(Network.getResponseBody(requestId)).getBody();
+//                System.out.println("Body :" + body);
+//                System.out.println("************************");
 
 
                 //add to list
-                HashMap map = new HashMap<String,Object>();
-                map.put("url","");
+                WebResponse webresponse=new WebResponse();
+                webresponse.requestUrl=response.getResponse().getUrl();
+                webresponse.responseBody = body;
+                webresponse.resourceType=response.getType().toString();
+                data.add(webresponse);
             }
 
         });
@@ -58,6 +61,13 @@ public class WebDriverDemo
         driver.get("https://anoopsimon.github.io/jokes/");
         Thread.sleep(2000);
         driver.quit();
+
+        for (WebResponse r:data)
+        {
+            System.out.println(r.requestUrl);
+            System.out.println(r.responseBody);
+            System.out.println(r.resourceType);
+        }
 
     }
 }
