@@ -1,5 +1,6 @@
 package core.utils.test.fakefiller;
 
+import core.utils.CustomFormFiller;
 import core.utils.FakeFiller;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,6 +19,7 @@ public class FakeFillerCoreTests
         Assert.assertTrue("All rows in test datasheet should be captured. There are two records in file " + path,data.size() == 2);
         Assert.assertTrue("Test Case name should be captured as Anwser",
                 data.stream().findFirst().get().containsKey("Answer"));
-
+        CustomFormFiller cf= new CustomFormFiller();
+        cf.fillForm(null,path,testCase);
     }
 }
