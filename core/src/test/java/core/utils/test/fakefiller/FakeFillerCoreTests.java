@@ -15,7 +15,9 @@ public class FakeFillerCoreTests
         String testCase= "TC01";
 
         List<TreeMap<String, String>> data= FakeFiller.getFlow(path,testCase);
-        Assert.assertTrue(data.size() == 2);
+        Assert.assertTrue("All rows in test datasheet should be captured. There are two records in file " + path,data.size() == 2);
+        Assert.assertTrue("Test Case name should be captured as Anwser",
+                data.stream().findFirst().get().containsKey("Answer"));
 
     }
 }
