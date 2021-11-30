@@ -1,4 +1,4 @@
-package bdd;
+package core.bdd.steps;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;

@@ -72,7 +72,7 @@
                     <systemProperties>
                         <systemProperty>
                             <key>cucumber.glue</key>
-                            <value>io.cucumber.skeleton</value>
+                            <value>core.bdd.steps</value>
                         </systemProperty>
                         <systemProperty>
                             <key>cucumber.filter.tags</key>
