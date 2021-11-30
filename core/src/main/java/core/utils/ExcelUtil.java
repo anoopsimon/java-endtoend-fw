@@ -6,6 +6,7 @@ import org.dhatim.fastexcel.reader.Sheet;
 
 import java.io.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExcelUtil {
 
@@ -17,7 +18,7 @@ public class ExcelUtil {
      */
     public static List<Row> getSheet(String filePath, String sheetName)
     {
-        try (InputStream is = new FileInputStream(new File(filePath)); ReadableWorkbook wb = new ReadableWorkbook(is))
+        try (InputStream is = new FileInputStream(filePath); ReadableWorkbook wb = new ReadableWorkbook(is))
         {
             Sheet sheet = wb.getSheets().filter(wSheet-> wSheet.getName().equalsIgnoreCase(sheetName)).findFirst().orElseThrow(() -> new RuntimeException("Sheet "+ sheetName + "not found in workbook"));
             return sheet.read();
@@ -27,14 +28,24 @@ public class ExcelUtil {
         }
     }
 
+    public static List<String> sheetNames(String filePath){
+        try (InputStream is = new FileInputStream(filePath); ReadableWorkbook wb = new ReadableWorkbook(is))
+        {
+            return wb.getSheets().map(x->x.getName()).collect(Collectors.toList());
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to read sheet from excel =>" + e.getMessage());
+        }
+    }
+
     /**
-     * Read an excel file into readable workbook
+     * get all file names
      * @param filePath
      * @return
      */
     public static ReadableWorkbook getWorkbook(String filePath)
     {
-        try (InputStream is = new FileInputStream(new File(filePath)); ReadableWorkbook wb = new ReadableWorkbook(is))
+        try (InputStream is = new FileInputStream(filePath); ReadableWorkbook wb = new ReadableWorkbook(is))
         {
             return wb;
 

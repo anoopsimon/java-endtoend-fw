@@ -41,5 +41,6 @@ public class FakeFillerCoreTests
 
         CustomFormFiller cf= new CustomFormFiller();
         cf.fillForm(driver,path,testCase);
+        driver.quit();
     }
 }

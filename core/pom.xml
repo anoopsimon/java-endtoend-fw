@@ -51,6 +51,36 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!--            mvn clean install exec:java -Dexec.classpathScope=test -Dexec.args="&#45;&#45;tags @demo" -Denvironment=uat-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>io.cucumber.core.cli.Main</mainClass>
+                    <arguments>
+                        <argument>src/test/resources</argument>
+                    </arguments>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>cucumber.glue</key>
+                            <value>io.cucumber.skeleton</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>cucumber.filter.tags</key>
+                            <value>@demo</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -74,6 +104,12 @@
             <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-core</artifactId>
+            <version>${cucumber.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

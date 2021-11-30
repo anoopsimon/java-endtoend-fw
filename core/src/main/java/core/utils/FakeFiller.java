@@ -27,24 +27,31 @@ public abstract class FakeFiller {
      * @return
      */
     public static List<TreeMap<String, String>> getFlow(String dataSheet, String testCaseName) {
-        logger.info("Reading  DataSheet : " + dataSheet);
-        List<Row> datasheet = ExcelUtil.getSheet(dataSheet, "Sheet1");
-        Row header = datasheet.stream().findFirst().get();
+        logger.info("Loaded workbook : " + dataSheet);
+
         List<TreeMap<String, String>> curatedData = new ArrayList<TreeMap<String, String>>();
-        int rowIndex = 0;
-        for (Row row : datasheet.stream().skip(1).collect(Collectors.toList())) {
-            rowIndex++;
-            TreeMap<String, String> data = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
-            for (int index = 0; index < row.getCellCount(); index++) {
-                String headerName = header.getCell(index).asString();
-                if (headerName.equalsIgnoreCase(testCaseName)) headerName = "Answer";
-                data.put(headerName, row.getCell(index).asString());
+        for (String sheet:ExcelUtil.sheetNames(dataSheet))
+        {
+            logger.info("Reading  DataSheet : " + sheet);
+
+            List<Row> datasheet = ExcelUtil.getSheet(dataSheet, sheet);
+            Row header = datasheet.stream().findFirst().get();
+            int rowIndex = 0;
+            for (Row row : datasheet.stream().skip(1).collect(Collectors.toList())) {
+                rowIndex++;
+                TreeMap<String, String> data = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+                for (int index = 0; index < row.getCellCount(); index++) {
+                    String headerName = header.getCell(index).asString();
+                    if (headerName.equalsIgnoreCase(testCaseName)) headerName = "Answer";
+                    data.put(headerName, row.getCell(index).asString());
+                }
+                logger.info("Data in Row " + rowIndex + ": " + data);
+                curatedData.add(data);
             }
-            logger.info("Data in Row " + rowIndex + ": " + data);
-            curatedData.add(data);
+
+            logger.info("Found  " + curatedData.size() + " records in datasheet for testcase : " + testCaseName);
         }
 
-        logger.info("Found  " + curatedData.size() + " records in datasheet for testcase : " + testCaseName);
 
         return curatedData;
 
