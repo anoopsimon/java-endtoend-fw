@@ -9,5 +9,9 @@ A Simple framework built using Java-Selenium 4 - Cucumber to automate web , mobi
 - Java 1.8.*
 - Fast Excel
 
+### Run tests from CI tools
+Simply run command via CI tool of your choice.
+
+```mvn clean install exec:java -Dexec.classpathScope=test -Dexec.args="--tags @demo" -Denvironment=uat```
 
 

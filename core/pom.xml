@@ -78,6 +78,10 @@
                             <key>cucumber.filter.tags</key>
                             <value>@demo</value>
                         </systemProperty>
+                        <systemProperty>
+                            <key>cucumber.plugin</key>
+                            <value>html:target/report.html</value>
+                        </systemProperty>
                     </systemProperties>
                 </configuration>
             </plugin>
