@@ -11,12 +11,15 @@
 
     <modules>
         <module>core</module>
+        <module>mobile</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <local.maven.repository>file:///C:/Temp/mavenlocal</local.maven.repository>
+
     </properties>
 
     <dependencies>
@@ -26,8 +29,6 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-
-
     </dependencies>
 
     <build>
@@ -61,7 +62,8 @@
         <snapshotRepository>
             <id>snapshots</id>
             <name>d80f4d1373a5-snapshots</name>
-            <url>http://localhost:8081/artifactory/automation-libs-snapshot-local</url>
+<!--            <url>http://localhost:8081/artifactory/automation-libs-snapshot-local</url>-->
+            <url>${local.maven.repository}</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
