@@ -24,3 +24,8 @@ jobs:
         cache: maven
     - name: Build Project with Maven
       run: mvn -B clean install
+  - name: Publish  Test Results
+    uses: EnricoMi/publish-unit-test-result-action/composite@v1
+    if: always()
+    with:
+      files: surefire-reports/**/*.xml
