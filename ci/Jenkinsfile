@@ -3,24 +3,19 @@ node {
 
     stage('Preparation') {
         git([url: 'https://github.com/anoopsimon/java-endtoend-fw.git', branch: 'main'])
-
         mvnHome = tool 'M3'
     }
 
     stage('Build') {
-        sh "cd core"
         sh "'${mvnHome}/bin/mvn' clean package -DskipTests=true"
     }
 
     stage('Test Execution') {
         try {
-           // sh "'${mvnHome}/bin/mvn' test -Pweb-execution -Dtarget=local -Dsuite=local -Dtestng.dtd.http=true"
-         sh "cd core"
-          sh "pwd"
-         sh "'${mvnHome}/bin/mvn' clean install exec:java -Dexec.classpathScope=test"
+         sh "'${mvnHome}/bin/mvn' -pl core clean install exec:java -Dexec.classpathScope=test"
 
         } catch (Exception e) {
-            currentBuild.result = 'SUCCESS'
+            currentBuild.result = 'FAILURE'
         } finally {
             junit '**/target/surefire-reports/TEST-*.xml'
 
