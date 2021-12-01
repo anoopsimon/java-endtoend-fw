@@ -67,7 +67,7 @@
                 <configuration>
                     <mainClass>io.cucumber.core.cli.Main</mainClass>
                     <arguments>
-                        <argument>src/test/resources</argument>
+                        <argument>core/src/test/resources</argument>
                     </arguments>
                     <systemProperties>
                         <systemProperty>
