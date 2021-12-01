@@ -8,6 +8,7 @@ node {
     }
 
     stage('Build') {
+        sh "cd core"
         sh "'${mvnHome}/bin/mvn' clean package -DskipTests=true"
     }
 
