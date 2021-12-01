@@ -15,6 +15,7 @@ node {
     stage('Test Execution') {
         try {
            // sh "'${mvnHome}/bin/mvn' test -Pweb-execution -Dtarget=local -Dsuite=local -Dtestng.dtd.http=true"
+         sh "pwd"
          sh "cd core"
          sh "'${mvnHome}/bin/mvn' clean install exec:java -Dexec.classpathScope=test -Dexec.args='-tags @demo' -Denvironment=uat"
 
