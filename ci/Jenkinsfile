@@ -8,13 +8,13 @@ node {
     }
 
     stage('Build') {
-        bat "'${mvnHome}/bin/mvn' clean package -DskipTests=true"
+        sh "'${mvnHome}/bin/mvn' clean package -DskipTests=true"
     }
 
     stage('Test Execution') {
         try {
            // sh "'${mvnHome}/bin/mvn' test -Pweb-execution -Dtarget=local -Dsuite=local -Dtestng.dtd.http=true"
-         bat "'${mvnHome}/bin/mvn' clean install exec:java -Dexec.classpathScope=test -Dexec.args='-tags @demo' -Denvironment=uat"
+         sh "'${mvnHome}/bin/mvn' clean install exec:java -Dexec.classpathScope=test -Dexec.args='-tags @demo' -Denvironment=uat"
 
         } catch (Exception e) {
             currentBuild.result = 'FAILURE'
