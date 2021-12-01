@@ -17,8 +17,7 @@ node {
         } catch (Exception e) {
             currentBuild.result = 'FAILURE'
         } finally {
-            //junit '**/target/surefire-reports/TEST-*.xml'
-            junit '**/target/report.html'
+           junit '**/target/surefire-reports/TEST-*.xml'
 
             /*
              * Please read https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy
@@ -29,7 +28,7 @@ node {
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'core/target',
-                reportFiles: 'report.html',
+                reportFiles: 'index.html',
                 reportName: "Test Report"
             ])
         }
