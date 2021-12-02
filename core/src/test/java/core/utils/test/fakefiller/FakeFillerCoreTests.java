@@ -31,13 +31,14 @@ public class FakeFillerCoreTests
     public void verifyFormFiller()
     {
         String path=System.getProperty("user.dir")+ "/src/test/resources/TestData_FF.xlsx";
+        String checkoutForm="file://"+System.getProperty("user.dir")+ "/src/test/resources/CheckoutForm.html";
         String testCase= "TC01";
 
         WebDriverManager.chromedriver().setup();
         WebDriver driver=new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofMinutes(1));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofMinutes(1));
-        driver.get("https://demoqa.com/automation-practice-form");
+        driver.get(checkoutForm);
 
         CustomFormFiller cf= new CustomFormFiller();
         cf.fillForm(driver,path,testCase);

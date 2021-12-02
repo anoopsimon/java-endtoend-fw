@@ -5,6 +5,7 @@ import core.components.web.Textbox;
 import core.constants.KeyWords;
 import org.dhatim.fastexcel.reader.Row;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -42,8 +43,10 @@ public abstract class FakeFiller {
                 TreeMap<String, String> data = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
                 for (int index = 0; index < row.getCellCount(); index++) {
                     String headerName = header.getCell(index).asString();
+                    String answer= row.getCell(index)!=null ? row.getCell(index).asString() :"";
+
                     if (headerName.equalsIgnoreCase(testCaseName)) headerName = "Answer";
-                    data.put(headerName, row.getCell(index).asString());
+                    data.put(headerName, answer);
                 }
                 logger.info("Data in Row " + rowIndex + ": " + data);
                 curatedData.add(data);
@@ -80,9 +83,54 @@ public abstract class FakeFiller {
         });
     }
 
+    private By getLocator()
+    {
+        String locator = this.currentRow.get(KeyWords.Locator);
+        String locatorType=this.currentRow.get(KeyWords.LocatorType);
+        String question=this.currentRow.get(KeyWords.Question);
+        String message="Sorry , but Locator value is mandatory for question " + question;
+        if(locator.isEmpty()) {
+            logger.error(message);
+            throw new RuntimeException(message);
+        }
+        switch (locatorType.toLowerCase(Locale.ROOT))
+        {
+            case "css":
+            case "cssselector":
+                return By.cssSelector(locator);
+             case "xpath":
+                return By.xpath(locator);
+            case "classname":
+                return By.className(locator);
+            case "id":
+                return By.id(locator);
+            case "linkedtext":
+                return By.linkText(locator);
+            case "tagname":
+                return By.tagName(locator);
+            case "partiallinktext":
+                return By.partialLinkText(locator);
+                default:
+                return deriveLocatorType();
+        }
+    }
+
+
+    private By deriveLocatorType() {
+        String locator=this.currentRow.get(KeyWords.Locator);
+        String question=this.currentRow.get(KeyWords.Question);
+        logger.error("Locator Type is not provided for question "+ question +
+                ". Hence determining locator type from locator value. (only XPATH and CSS Selector can be derived)");
+
+        By defaultType = locator.startsWith("/")?By.xpath(locator):By.cssSelector(locator);
+        logger.info("Locator Type derived as " + defaultType.getClass().getTypeName());
+        return defaultType;
+    }
+
     private void processButtonElement() {
         //isShadow ?
-        Button button = new Button(this.driver, By.cssSelector(this.currentRow.get(KeyWords.Locator)));
+        String locator=this.currentRow.get(KeyWords.Locator);
+        Button button = new Button(this.driver, getLocator());
         String[] answers = new String[]{"Yes", "True", "Y"};
         String answer=this.currentRow.get(KeyWords.Answer);
         if (Arrays.stream(answers).anyMatch(x -> x.equalsIgnoreCase(answer))) {
@@ -96,15 +144,14 @@ public abstract class FakeFiller {
         //isShadow ?
         String value = this.currentRow.get(KeyWords.Answer);
         if (value.isEmpty()) return;
-        Textbox textbox = new Textbox(this.driver, By.cssSelector(this.currentRow.get(KeyWords.Locator)));
+        Textbox textbox = new Textbox(this.driver, getLocator());
         textbox.click();
         textbox.setText(value);
 
     }
 
     private void processCustomControl() {
-        String value = this.currentRow.get(KeyWords.Answer);
-        WebElement element = driver.findElement(By.cssSelector(this.currentRow.get(KeyWords.Locator)));
+        WebElement element = driver.findElement(getLocator());
         element.click();
     }
 
