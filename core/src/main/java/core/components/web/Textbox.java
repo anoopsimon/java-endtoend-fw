@@ -28,6 +28,7 @@ public class Textbox extends SeleniumWrapper
         WebElement element =  $(selector);
         if(clear) element.clear();
         if(click) element.click();
+
         element.sendKeys(value);
     }
 

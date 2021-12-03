@@ -1,12 +1,13 @@
 package core.components.web;
 
+import core.utils.Waiter;
 import org.openqa.selenium.*;
 
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class SeleniumWrapper
+public class SeleniumWrapper extends Waiter
 {
     private WebDriver driver;
 
@@ -22,9 +23,11 @@ public class SeleniumWrapper
 
     public WebElement $(By selector) {
         validate(driver,selector);
-        if (IsElementPresent(selector))
-            return driver.findElement(selector);
-
+        if (IsElementPresent(selector)){
+            WebElement element = driver.findElement(selector);
+            highlight(element);
+            return element;
+        }
         try {
             throw new NoSuchElementException("No web element found for selector => " + selector);
         } catch (RuntimeException re) {
@@ -49,10 +52,24 @@ public class SeleniumWrapper
         return  jse.executeScript(script, $(selector));
     }
 
+    public Object executeScript(WebElement element,String script)
+    {
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+
+        return  jse.executeScript(script, element);
+    }
+
     protected void highlight(By selector)
     {
         String script = "arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');";
         executeScript(selector,script);
+
+    }
+
+    protected void highlight(WebElement element)
+    {
+        String script = "arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');";
+        executeScript(element,script);
 
     }
 
