@@ -3,6 +3,7 @@ package core.utils;
 import core.components.web.Button;
 import core.components.web.Textbox;
 import core.constants.KeyWords;
+import core.data.RandomData;
 import org.dhatim.fastexcel.reader.Row;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -59,6 +60,7 @@ public abstract class FakeFiller {
         return curatedData;
 
     }
+
 
     public void fillForm(WebDriver driver, String filepath, String testcase) {
         this.driver = driver;
@@ -155,5 +157,27 @@ public abstract class FakeFiller {
         element.click();
     }
 
+
+    /*Data Generation*/
+    public String getAnswer(String keyword){
+        if(keyword.isEmpty()) throw new RuntimeException("Keyword can't be empty.. ");
+
+        switch (keyword.toUpperCase(Locale.ROOT)){
+            case "RANDOM_FIRSTNAME":
+                return RandomData.firstName();
+            case "RANDOM_LASTNAME":
+                return RandomData.lastName();
+            case "RANDOM_ADDRESS_FULL":
+                return RandomData.address().fullAddress();
+            case "RANDOM_ADDRESS_STREETNAME":
+                return RandomData.address().streetName();
+            case "RANDOM_ADDRESS_STREETNUMBER":
+                return RandomData.address().streetAddressNumber();
+            case "RANDOM_ADDRESS_POSTCODE":
+                return RandomData.address().zipCode();
+            default:
+                throw new RuntimeException("Keyword '" +keyword+ "' not supported");
+        }
+    }
 
 }
