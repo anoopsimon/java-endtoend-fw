@@ -3,7 +3,7 @@ package core.utils.test;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import core.mockserver.Mock;
 import org.junit.*;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
 import static io.restassured.RestAssured.*;
