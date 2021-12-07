@@ -46,36 +46,41 @@ public class Mock {
         return this;
     }
 
+    public Mock configureStubWithJsonBodyFile(String resource,String bodyFile,String... contentType)
+    {
+        logger.info("Configure mock endpoint, with resource " + resource+
+                "and Body " + bodyFile);
+
+        String contentTypeVal= contentType.length > 0 ? contentType[0] : "application/json";
+        logger.info("Setting Content Type as : " + contentTypeVal);
+        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo(resource))
+                        .willReturn(WireMock.aResponse().withHeader("Content-Type", contentTypeVal)
+                        .withStatus(200)
+                        .withBodyFile(bodyFile)));
+
+        return this;
+    }
+
+    /**
+     * This method provides an option to build a resource based on your configuration.
+     * @param mappingBuilder
+     * @return
+     */
     public Mock configureStub(MappingBuilder mappingBuilder)
     {
+        logger.info("Configure a new resource using mapping builder.");
         ReflectionUtil.invokeAllGetterMethodsWithNoParam(mappingBuilder.build());
         wireMockServer.stubFor(mappingBuilder);
 
         return this;
     }
 
-    public void invoker(StubMapping o)  {
-        //final Object o = "";
-        for (Method m : o.getClass().getMethods()) {
-            if (m.getName().startsWith("get") && m.getParameterTypes().length == 0) {
-                try {
-                    final Object r = m.invoke(o);
-                    System.out.println(m.getName() +":" + r);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    // do your thing with r
-                }
-            }
-        }
-    }
-
+    /**
+     * Kill mock server instance.
+     */
     public void stop() {
+        logger.info("Killing mock serve running on port "  + this.port);
         wireMockServer.shutdownServer();
     }
 
-    public static void main(String[] args) {
-        WireMockServer m =new WireMockServer(8095);
-        m.start();
-    }
 }
