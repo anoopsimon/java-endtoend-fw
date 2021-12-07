@@ -198,3 +198,10 @@ GET                                                        | GET
 2021-12-07 14:35:24 INFO  RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.AdminRequestHandler. Normalized mapped under returned 'null'
 2021-12-07 14:35:24 ERROR No response could be served as there are no stub mappings in this WireMock instance.
 2021-12-07 14:35:24 ERROR No response could be served as there are no stub mappings in this WireMock instance.
+2021-12-07 22:02:05 ERROR Failed to initialize Autoit: 
+2021-12-07 22:02:05 INFO  Checking AutoIt installation
+2021-12-07 22:02:05 INFO  
+2021-12-07 22:02:32 INFO  End of search: 0 match(es) found.
+2021-12-07 22:02:32 INFO  AutoIt already installed: true
+2021-12-07 22:02:32 INFO  AutoItX 64 bit version is not installed.
+2021-12-07 22:02:32 INFO  Autoit installed.
