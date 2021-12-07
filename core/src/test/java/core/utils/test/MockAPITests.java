@@ -15,10 +15,7 @@ public class MockAPITests {
     String userData ="{\"name\":\"auto\"}";
     Mock mock;
 
-    @Before
-    public void hh(){
-        System.out.println("BeforeAll");
-    }
+
     @Before
     public void setup()
     {

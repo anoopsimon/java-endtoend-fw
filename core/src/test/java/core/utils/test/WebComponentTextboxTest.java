@@ -58,4 +58,9 @@ public class WebComponentTextboxTest
 
 
     }
+    @Test
+    public void clickTest()
+    {
+
+    }
 }
