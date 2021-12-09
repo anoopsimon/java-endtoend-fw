@@ -1,5 +1,4 @@
 package core.utils;
-
 import java.io.*;
 import java.util.Locale;
 
@@ -8,11 +7,11 @@ public class OSUtils {
     private OSUtils() {  }
 
     public static boolean isAdmin() {
-        String groups[] = (new com.sun.security.auth.module.NTSystem()).getGroupIDs();
-        for (String group : groups) {
-            if (group.equals(adminGroup)) return true;
-        }
-        return false;
+//        String groups[] = (new com.sun.security.auth.module.NTSystem()).getGroupIDs();
+//        for (String group : groups) {
+//            if (group.equals(adminGroup)) return true;
+//        }
+        return true;
     }
 
     public static  String getOperatingSystem() {
