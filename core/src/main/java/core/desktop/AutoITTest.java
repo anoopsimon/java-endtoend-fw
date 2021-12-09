@@ -11,7 +11,7 @@ public class AutoITTest {
         System.out.println("DLL Registration Status :" + output);
         AutoItX desktopSession = ai.initAutoIt();
         desktopSession.run("calc.exe");
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         desktopSession.winActive("Calculator");
         desktopSession.winClose("Calculator");
 

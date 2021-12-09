@@ -36,8 +36,8 @@ public class AutoItXInstaller {
         }
 
         // 1. Register DLL
-        String command = "/Windows/System32/regsvr32.exe " + dllFilepath.replace("/","") +" /s";
-        System.out.println(command);
+        String command = "/Windows/System32/regsvr32.exe " + dllFilepath.replaceFirst("/","") +" /s";
+        log.info("Register DLL using command :" + command);
         try {
             Process process = Runtime.getRuntime().exec(command);
             process.waitFor();
