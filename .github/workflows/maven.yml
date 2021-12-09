@@ -19,5 +19,5 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
-    - name: Build and Run Tests
-      run: mvn -B clean test
+          run: mvn -B clean test
+  
