@@ -2,152 +2,62 @@ package core.desktop;
 
 import autoitx4java.AutoItX;
 import com.jacob.com.LibraryLoader;
+import core.utils.OSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.function.Function;
+import java.util.Locale;
 
 public class AutoItXInstaller {
     private static final Logger log = LoggerFactory.getLogger(AutoItXInstaller.class);
     private static final Boolean JVM_ARCHITECH_32 = System.getProperty("sun.arch.data.model").contains("32");
-    private static final String REGSVR_SERVICE_64 = "/Windows/System32/regsvr32.exe";
-    private static final String REGSVR_SERVICE_32 = "/Windows/SysWoW64/regsvr32.exe"; // TODO: Wire this
-    private static final Function<Boolean, String> REGSVR_UNINSTALL_SWITCH = unintall -> unintall ? " -u" : "";
-    private static final Function<Boolean, String> REGSVR_SILENT_SWITCH = unintall -> unintall ? " -s" : "";
-    private static final String AUTOITX_DLL_TO_USE = JVM_ARCHITECH_32 ? "autoit/AutoItX3.dll" : "autoit/AutoItX3_x64.dll";
-    private String errorCode = "-1";
-    private Boolean skipInstall=false;
-    private Boolean uninstall=false;
-    private Boolean silent=true;
-    private Runtime runtime = Runtime.getRuntime();
-
-//    public AutoItXInstaller(Environment env) {
-//        this.skipInstall = env.getProperty("autoit.installation.skip", Boolean.class, false);
-//        this.uninstall = env.getProperty("autoit.installation.uninstall", Boolean.class, false);
-//        this.silent = env.getProperty("autoit.installation.silent", Boolean.class, true);
-//        this.env = env;
-//    }
-
-    //@Bean
-    public AutoItX initAutoIt() throws IOException {
-
-        //1. register DLL
-        //2 . Register Jacob
-        // DONE
-        String JACOB_DLL_TO_USE = JVM_ARCHITECH_32 ? "autoit/jacob-1.19-x86.dll" : "autoit/jacob-1.19-x64.dll";
-        String path=this.getClass().getClassLoader().getResource(JACOB_DLL_TO_USE).getPath();
-        System.out.println("path : " +path);
-        String JACOB_DLL_ABSOLUTE_PATH = path;
-        System.setProperty(LibraryLoader.JACOB_DLL_PATH, JACOB_DLL_ABSOLUTE_PATH);
-        AutoItX autoItX = new AutoItX();
-        autoItX.run("calc.exe");
+    private static final String AUTOITX_DLL_TO_USE = OSUtils.getOSBitVersion()== 32 ? "autoit/AutoItX3.dll" : "autoit/AutoItX3_x64.dll";
+    private static String dllFilepath = AutoItXInstaller.class.getClassLoader().getResource(AUTOITX_DLL_TO_USE).getPath();
+    String JACOB_DLL_TO_USE = JVM_ARCHITECH_32 ? "autoit/jacob-1.19-x86.dll" : "autoit/jacob-1.19-x64.dll";
 
 
-//        if (uninstall) {
-//            installAutoItDll();
-//        }
+    public int registerAutoITX3DLL()
+    {
+        // 1. Check OS version and admin rights.
+        log.info("Registering AutoITX3 DLL on this machine.");
+        OSUtils.OSType os = OSUtils.getOperatingSystemType();
+        String message="Sorry we can't set up register autoit dll on this machine.Only Windows is supported. OS found : " + os;
+        String messageAdminError="User should be an admin to register autoit dll";
 
-//        try {
-//            autoItX = new AutoItX();
-//        } catch (Exception e) {
-//            log.error("Failed to initialize Autoit: ", e.toString());
-//            try {
-//                installAutoItDll();
-//            } catch (IOException einstall) {
-//                log.error("Failed to install Autoit: ", einstall.toString());
-//            } finally {
-//                autoItX = new AutoItX();
-//            }
-//        }
-        return autoItX;
-    }
-
-    private void installAutoItDll() throws IOException {
-        if (skipInstall) {
-            return; // Skip installation
+        if(os!= OSUtils.OSType.Windows){
+            log.error(message);
+            throw new RuntimeException(message);
+        }
+        if(!OSUtils.isAdmin())
+        {
+            log.error(messageAdminError);
+            throw new RuntimeException(messageAdminError);
         }
 
-        log.info("Checking AutoIt installation");
-        boolean installed = checkIsItInstalled().equals("checker_1");
-        log.info("AutoIt already installed: " + installed);
-        log.info(logger());
-
-        if (uninstall && installed) {
-            install();
-            log.info("Autoit uninstalled.");
-            System.exit(0);
-        }
-        if (uninstall && !installed) {
-            log.info("Autoit already uninstalled.");
-            System.exit(0);
-        }
-        if (!uninstall) {
-            install();
-            log.info("Autoit installed.");
-        }
-    }
-
-    private String install() throws IOException {
-        String path = this.getClass().getClassLoader().getResource(AUTOITX_DLL_TO_USE).getPath();
-        String command = REGSVR_SERVICE_64 +
-                REGSVR_UNINSTALL_SWITCH.apply(uninstall) +
-                REGSVR_SILENT_SWITCH.apply(silent) + " " +
-                '"' + path + '"';
-        System.out.println("command : " +  command);
+        // 1. Register DLL
+        String command = "/Windows/System32/regsvr32.exe " + dllFilepath.replace("/","") +" /s";
+        System.out.println(command);
         try {
-            Process process = runtime.exec(command);
+            Process process = Runtime.getRuntime().exec(command);
             process.waitFor();
-            errorCode = "install_" + process.exitValue();
-            return errorCode;
+            return process.exitValue();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return "-1";
+        return -1;
+
     }
 
-    private String logger() {
-        switch (errorCode) {
-            case "install_0":
-                return "AutoItX " +
-                        (JVM_ARCHITECH_32 ? "32" : "64") + " bit version " +
-                        "has been " +
-                        (uninstall ? "uninstalled" : "installed") +
-                        " - " + "Path: " + AUTOITX_DLL_TO_USE;
-            case "install_5":
-                return "Error - turn off silent mode";
-            case "install_3":
-                return "DLL missing from: " + AUTOITX_DLL_TO_USE;
+    public AutoItX initAutoIt()
+    {
+        String path=this.getClass().getClassLoader().getResource(JACOB_DLL_TO_USE).getPath();
 
-            case "checker_0":
-                return "AutoItX " +
-                        (JVM_ARCHITECH_32 ? "32" : "64") + " bit version is already installed.";
-            case "checker_1":
-                return "AutoItX " +
-                        (JVM_ARCHITECH_32 ? "32" : "64") + " bit version is not installed.";
-            default:
-                return "Error code: " + errorCode;
-        }
+        System.setProperty(LibraryLoader.JACOB_DLL_PATH, path);
+        AutoItX autoItX = new AutoItX();
+
+        return autoItX; //11.0.11
     }
 
-    private String checkIsItInstalled() { // TODO: BUGFIX | This method is not reliable..
-        String command = "reg query HKLM\\SOFTWARE\\Classes /s /f " + AUTOITX_DLL_TO_USE;
 
-        try {
-            Process process = Runtime.getRuntime().exec(command);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String s;
-            while ((s = reader.readLine()) != null) {
-                log.info(s);
-            }
-            errorCode = "checker_" + process.exitValue();
-            return errorCode;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "-1";
-    }
 }
