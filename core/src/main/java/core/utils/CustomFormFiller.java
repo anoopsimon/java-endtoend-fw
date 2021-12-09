@@ -1,6 +1,5 @@
 package core.utils;
 import core.data.RandomData;
-import org.checkerframework.checker.units.qual.C;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

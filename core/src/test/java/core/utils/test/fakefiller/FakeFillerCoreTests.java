@@ -36,8 +36,8 @@ public class FakeFillerCoreTests
 
         WebDriverManager.chromedriver().setup();
         WebDriver driver=new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofMinutes(1));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofMinutes(1));
+        //driver.manage().timeouts().implicitlyWait(Duration.ofMinutes(1));
+        //driver.manage().timeouts().pageLoadTimeout(Duration.ofMinutes(1));
         driver.get(checkoutForm);
 
         CustomFormFiller cf= new CustomFormFiller();
