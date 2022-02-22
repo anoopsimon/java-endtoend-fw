@@ -1,0 +1,7 @@
+﻿Question,ControlType,Locator,LocatorType,TC01,TC02
+FirstName,Textbox,#fname,CssSelector,User1,User2
+Email,Textbox,#email,,Lname1,Lname2
+Address,Textbox,#adr,,"14 Silverwattle Drive , Melbourne",
+City,Textbox,#city,,Melbourne,
+State,Textbox,#state,,VIC,
+Zip,Textbox,#zip,,3008,
