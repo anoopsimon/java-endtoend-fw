@@ -12,6 +12,8 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
@@ -51,7 +53,7 @@ public class NetworkCaptureTest {
     @Test
     public void bMP() throws Exception {
         //Proxy Operations
-        WebDriverManager.chromedriver().setup();
+        WebDriverManager.edgedriver().setup();
         BrowserMobProxy proxy = new BrowserMobProxyServer();
         proxy.start(); // can specify a port here if you like
 
@@ -60,13 +62,13 @@ public class NetworkCaptureTest {
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--ignore-certificate-errors");
+        EdgeOptions options = new EdgeOptions();
+       // options.("--ignore-certificate-errors");
     // replace 'somedirectory' with a suitable temp dir on your filesystem
         //options.addArguments("--user-data-dir=C:/Temp");
-        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+        //capabilities.setCapability(EdgeOptions, options);
         // if chromedriver isn't on your system path, you'll need to set this system property
-        WebDriver driver = new ChromeDriver(capabilities);
+        WebDriver driver = new EdgeDriver(options);
         proxy.newHar("anoopsimon.github.io");
         proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
 
